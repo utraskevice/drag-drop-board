@@ -22,7 +22,7 @@ function render() {
     editEl.innerHTML = `<i class="fa-solid fa-pen"></i>`;
     editEl.className = "icon";
     starEl.innerHTML = `<i class="fa-solid fa-star"></i>`;
-    starEl.classList.add("icon");
+    starEl.className = singleObject.isFavorite ? "favorite" : "icon";
     removeEl.innerHTML = `<i class="fa-solid fa-trash"></i>`;
     removeEl.className = "icon";
 
@@ -30,6 +30,12 @@ function render() {
 
     removeEl.addEventListener("click", () => {
       toDo.splice(index, 1);
+      window.localStorage.setItem("toDo", JSON.stringify(toDo));
+      render();
+    });
+
+    starEl.addEventListener("click", () => {
+      toDo[index].isFavorite = !toDo[index].isFavorite;
       window.localStorage.setItem("toDo", JSON.stringify(toDo));
       render();
     });
@@ -46,7 +52,10 @@ document.querySelector("#input-container").addEventListener("submit", (e) => {
   e.preventDefault();
 
   const formData = new FormData(e.target);
-  toDo = toDo.concat(Object.fromEntries(formData));
+  const newToDo = Object.assign(Object.fromEntries(formData), {
+    isFavorite: false,
+  });
+  toDo = toDo.concat(newToDo);
 
   window.localStorage.setItem("toDo", JSON.stringify(toDo));
   e.target.reset();

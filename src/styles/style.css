@@ -57,6 +57,55 @@ body {
 #board > * {
   width: 31%;
   margin: 20px;
-  height: 300px;
-  border: 2px solid wheat;
+  border: 2px solid white;
+}
+
+#board h1 {
+  color: white;
+  text-align: center;
+  text-transform: uppercase;
+  margin: 10px;
+  font-size: 20px;
+}
+
+.single-object {
+  list-style: none;
+  min-height: 55px;
+  width: 90%;
+  background: #00b9ff;
+  color: white;
+  border-radius: 5px;
+  padding: 15px;
+  margin: 20px auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 5px #71a7ca;
+  box-sizing: border-box;
+}
+
+.icon {
+  width: 22px;
+  height: 22px;
+  background: none;
+  border: none;
+  outline: none;
+}
+
+.icon i {
+  color: white;
+  font-size: 1.2em;
+}
+
+.icon i:hover {
+  cursor: pointer;
+  color: black;
+}
+
+.favorite {
+  background: yellow;
+}
+
+.favorite i {
+  color: yellow;
 }

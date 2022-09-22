@@ -1,4 +1,40 @@
 let toDo = [];
+let inProgress = [];
+let done = [];
+const containers = document.querySelectorAll(".container");
+
+let object = null;
+
+function dragStart(e) {
+  object = this;
+  //   console.log("dragStart");
+}
+function dragEnd() {
+  object = null;
+  //   console.log("dragEnd");
+}
+
+containers.forEach((singleContainer) => {
+  singleContainer.addEventListener("dragover", dragOver);
+  singleContainer.addEventListener("dragenter", dragEnter);
+  singleContainer.addEventListener("dragleave", dragLeave);
+  singleContainer.addEventListener("drop", dragDrop);
+});
+
+function dragOver(e) {
+  e.preventDefault();
+  console.log("dragOver");
+}
+function dragEnter() {
+  console.log("dragEnter");
+}
+function dragLeave() {
+  console.log("dragLeave");
+}
+function dragDrop() {
+  this.append(object);
+  console.log("dragDrop");
+}
 
 function render() {
   const toDoId = "toDoList";
@@ -22,6 +58,8 @@ function render() {
     listItem.className = singleObject.isInEdit ? "input" : "";
     object.className = "single-object";
     object.setAttribute("draggable", true);
+    object.addEventListener("dragstart", dragStart);
+    object.addEventListener("dragend", dragEnd);
     editEl.innerHTML = singleObject.isInEdit
       ? `<i class="fa-solid fa-check"></i>`
       : `<i class="fa-solid fa-pen"></i>`;
@@ -30,7 +68,7 @@ function render() {
       listItem.type = "text";
       listItem.value = singleObject.newInput;
     } else {
-      listItem.textContent = [index + 1] + ". " + singleObject.newInput;
+      listItem.textContent = singleObject.newInput;
     }
     starEl.innerHTML = `<i class="fa-solid fa-star"></i>`;
     starEl.className = singleObject.isFavorite ? "favorite" : "icon";
@@ -76,6 +114,8 @@ document.querySelector("#input-container").addEventListener("submit", (e) => {
   const newToDo = Object.assign(Object.fromEntries(formData), {
     isFavorite: false,
     isInEdit: false,
+    // isInProgress: false,
+    // isDone: false,
   });
   toDo = toDo.concat(newToDo);
 

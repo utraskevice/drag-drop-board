@@ -1,8 +1,14 @@
 body {
-  background: #9fdaff;
+  background: #1d2d50;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
+h1 {
+  color: #fcdab7;
+  font-size: 40px;
+  margin: 20px auto;
+  text-align: center;
+}
 #input-container {
   width: 90%;
   max-width: 850px;
@@ -18,15 +24,14 @@ body {
   border-radius: 100px;
   border: none;
   outline: none;
-  background: #03a7e4;
-  color: white;
+  background: #133b5c;
+  color: #fcdab7;
   font-size: 16px;
   text-indent: 40px;
-  box-sizing: border-box;
 }
 
 .input::placeholder {
-  color: white;
+  color: #fcdab7;
   opacity: 0.6;
 }
 
@@ -39,17 +44,18 @@ body {
   border-radius: 100px;
   border: none;
   outline: none;
-  background: #00b9ff;
+  background: #1e5f74;
 }
 
 #addBtn:hover {
   cursor: pointer;
-  background: #2590b9;
+  background: #133b5c;
 }
 
 #addBtn svg {
   width: 18px;
   height: 18px;
+  color: #fcdab7;
 }
 
 #board {
@@ -60,31 +66,35 @@ body {
 #board > * {
   width: 31%;
   margin: 20px;
-  border: 2px solid white;
+  border: 2px solid #fcdab7;
+  border-radius: 10px;
+  box-shadow: 0 4px 5px #2c5e8a;
 }
 
 #board h1 {
-  color: white;
+  color: #fcdab7;
   text-align: center;
   text-transform: uppercase;
-  margin: 10px;
-  font-size: 20px;
+  margin: 20px 10px;
+  font-size: 30px;
+  font-weight: bold;
 }
 
 .single-object {
   list-style: none;
   min-height: 55px;
   width: 90%;
-  background: #00b9ff;
-  color: white;
+  background: #1e5f74;
+  color: #fcdab7;
   border-radius: 5px;
   padding: 15px;
   margin: 20px auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 4px 5px #71a7ca;
+  box-shadow: 0 4px 5px #2c5e8a;
   box-sizing: border-box;
+  cursor: move;
 }
 
 .icon,
@@ -97,11 +107,14 @@ body {
 }
 
 .icon i {
-  color: white;
+  color: #fcdab7;
   font-size: 1.2em;
 }
 
-.icon,
+.icon i:hover {
+  cursor: pointer;
+  color: black;
+}
 .favorite i:hover {
   cursor: pointer;
   color: black;

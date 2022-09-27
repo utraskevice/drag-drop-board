@@ -6,6 +6,7 @@ const containers = document.querySelectorAll(".container");
 let object = null;
 
 function dragStart(e) {
+  e.dataTransfer.setData("text", e.target.id);
   object = this;
   //   console.log("dragStart");
 }
@@ -15,34 +16,56 @@ function dragEnd() {
 }
 
 containers.forEach((singleContainer) => {
-  singleContainer.addEventListener("dragover", dragOver);
-  singleContainer.addEventListener("dragenter", dragEnter);
-  singleContainer.addEventListener("dragleave", dragLeave);
-  singleContainer.addEventListener("drop", dragDrop);
+  singleContainer.addEventListener("dragover", function (e) {
+    e.preventDefault();
+  });
+  singleContainer.addEventListener("drop", function (e) {
+    e.preventDefault();
+    const objectId = e.dataTransfer.getData("text");
+    e.target.append(document.getElementById(objectId));
+  });
 });
 
-function dragOver(e) {
-  e.preventDefault();
-  console.log("dragOver");
+// Remove function
+function deleteObject(index) {
+  toDo.splice(index, 1);
+  window.localStorage.setItem("toDo", JSON.stringify(toDo));
+  render();
 }
-function dragEnter() {
-  console.log("dragEnter");
+// Favorite function
+function favoriteObject(index) {
+  toDo[index].isFavorite = !toDo[index].isFavorite;
+  window.localStorage.setItem("toDo", JSON.stringify(toDo));
+  render();
 }
-function dragLeave() {
-  console.log("dragLeave");
-}
-function dragDrop() {
-  this.append(object);
-  console.log("dragDrop");
+
+// Edit function
+function editObject(singleObject, listItem, index) {
+  if (singleObject.isInEdit) {
+    toDo[index].newInput = listItem.value;
+  }
+  toDo[index].isInEdit = !toDo[index].isInEdit;
+  window.localStorage.setItem("toDo", JSON.stringify(toDo));
+  render();
 }
 
 function render() {
   const toDoId = "toDoList";
   const toDoList =
     document.querySelector(`#${toDoId}`) || document.createElement("ul");
+  const inProgressId = "inProgressList";
+  const inProgressList =
+    document.querySelector(`#${inProgressId}`) || document.createElement("ul");
+  const doneId = "doneList";
+  const doneList =
+    document.querySelector(`#${doneId}`) || document.createElement("ul");
 
   toDoList.innerHTML = null;
   toDoList.id = toDoId;
+  inProgressList.innerHTML = null;
+  inProgressList.id = inProgressId;
+  doneList.innerHTML = null;
+  doneId.id = doneId;
 
   toDo.forEach((singleObject, index) => {
     // console.log("Draw:", singleObject);
@@ -60,6 +83,7 @@ function render() {
     object.setAttribute("draggable", true);
     object.addEventListener("dragstart", dragStart);
     object.addEventListener("dragend", dragEnd);
+    object.id = Math.random() * 100;
     editEl.innerHTML = singleObject.isInEdit
       ? `<i class="fa-solid fa-check"></i>`
       : `<i class="fa-solid fa-pen"></i>`;
@@ -75,36 +99,26 @@ function render() {
     removeEl.innerHTML = `<i class="fa-solid fa-trash"></i>`;
     removeEl.className = "icon";
 
-    // Remove function
-    removeEl.addEventListener("click", () => {
-      toDo.splice(index, 1);
-      window.localStorage.setItem("toDo", JSON.stringify(toDo));
-      render();
-    });
+    removeEl.addEventListener("click", () => {});
 
-    // Favorite function
-    starEl.addEventListener("click", () => {
-      toDo[index].isFavorite = !toDo[index].isFavorite;
-      window.localStorage.setItem("toDo", JSON.stringify(toDo));
-      render();
-    });
+    starEl.addEventListener("click", () => favoriteObject(index));
 
-    // Edit function
-    editEl.addEventListener("click", () => {
-      if (singleObject.isInEdit) {
-        toDo[index].newInput = listItem.value;
-      }
-      toDo[index].isInEdit = !toDo[index].isInEdit;
-      window.localStorage.setItem("toDo", JSON.stringify(toDo));
-      render();
-    });
+    editEl.addEventListener("click", () =>
+      editObject(singleObject, listItem, index)
+    );
 
     iconDiv.append(removeEl, starEl, editEl);
     object.append(listItem, iconDiv);
     toDoList.append(object);
   });
 
+  inProgress.forEach(() => {});
+
+  done.forEach(() => {});
+
   document.querySelector("#to-do").append(toDoList);
+  document.querySelector("#in-progress").append(inProgressList);
+  document.querySelector("#done").append(doneList);
 }
 
 document.querySelector("#input-container").addEventListener("submit", (e) => {
@@ -124,11 +138,30 @@ document.querySelector("#input-container").addEventListener("submit", (e) => {
   render();
 });
 
+window.localStorage.setItem("inProgress", JSON.stringify(inProgress));
+window.localStorage.setItem("done", JSON.stringify(done));
+
 window.addEventListener("DOMContentLoaded", () => {
   const toDoObject = window.localStorage.getItem("toDo");
   if (toDoObject) {
     // console.log("New object");
     toDo = JSON.parse(toDoObject);
+    render();
+  }
+});
+
+window.addEventListener("DOMContentLoaded", () => {
+  const inProgressObject = window.localStorage.getItem("inProgress");
+  if (inProgressObject) {
+    inProgress = JSON.parse(inProgressObject);
+    render();
+  }
+});
+
+window.addEventListener("DOMContentLoaded", () => {
+  const doneObject = window.localStorage.getItem("done");
+  if (doneObject) {
+    done = JSON.parse(doneObject);
     render();
   }
 });
